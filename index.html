@@ -6,56 +6,351 @@
     <title>My Portfolio</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
     <style>
+        /* Animated background */
+
+        /* Update background dan animasi */
         .hero-section {
             height: 100vh;
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('/api/placeholder/1920/1080');
-            background-size: cover;
-            background-position: center;
+            background: linear-gradient(
+                45deg,
+                #000000,
+                #1a1a1a,
+                #333333,
+                #1a1a1a,
+                #000000
+            );
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            position: relative;
+            overflow: hidden;
+        }
+    
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+    
+        /* Efek overlay dengan pattern */
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                45deg,
+                rgba(255,255,255,0.05) 0px,
+                rgba(255,255,255,0.05) 1px,
+                transparent 1px,
+                transparent 10px
+            );
+        }
+    
+        /* Efek grain untuk tekstur */
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.1"/></svg>');
+            opacity: 0.3;
+            pointer-events: none;
+        }
+    
+        /* Particle effect dengan warna abu-abu */
+        .particle {
+            position: absolute;
+            background: linear-gradient(145deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleFloat 6s infinite;
+            box-shadow: 0 0 10px rgba(255,255,255,0.1);
+        }
+    
+        @keyframes particleFloat {
+            0%, 100% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) translateX(10px) rotate(180deg);
+            }
+        }
+    
+        /* Update hero title style */
+        .hero-title {
+            font-size: 4.5rem;
+            font-weight: 800;
+            background: linear-gradient(
+                to right,
+                #ffffff,
+                #a0a0a0,
+                #ffffff
+            );
+
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: titleShine 3s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(255,255,255,0.1);
+            letter-spacing: 2px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease forwards,
+                       titleShine 3s ease-in-out infinite;
+        }
+    
+        @keyframes titleShine {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+    
+        /* Update subtitle style */
+        .hero-subtitle {
+            font-size: 1.8rem;
+            color: #a0a0a0;
+            font-weight: 300;
+            letter-spacing: 3px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease 0.5s forwards;
+        }
+    
+        /* Glow effect untuk button */
+        .hero-button {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
             color: white;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease 1s forwards;
         }
-        .project-card {
-            transition: transform 0.3s;
-        }
-        .project-card:hover {
+    
+        .hero-button:hover {
+            background: rgba(255,255,255,0.2);
+            box-shadow: 0 0 30px rgba(255,255,255,0.1);
             transform: translateY(-5px);
         }
-        .skill-icon {
-            font-size: 2.5rem;
-            margin: 1rem;
+    
+        .hero-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255,255,255,0.2),
+                transparent
+            );
+            transition: 0.5s;
         }
+    
+        .hero-button:hover::before {
+            left: 100%;
+        }
+    
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+            .hero-subtitle {
+                font-size: 1.4rem;
+            }
+        }
+    
+
+        /* Animated cards */
+        .project-card {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .project-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .project-card:hover::after {
+            left: 100%;
+        }
+
+        /* Skill badges animation */
+        .badge {
+            transition: all 0.3s ease;
+        }
+
+        .badge:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Custom animated button */
+        .animated-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .animated-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .animated-btn:hover::before {
+            left: 100%;
+        }
+
+        /* Floating animation */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Social icons animation */
+        .social-icon {
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            transform: scale(1.2) rotate(360deg);
+        }
+
+        /* Typing animation */
+        .typing-text {
+            border-right: 3px solid;
+            width: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: 
+                typing 3s steps(30) infinite,
+                cursor .5s step-end infinite alternate;
+        }
+
+        @keyframes typing {
+            0% { width: 0 }
+            50% { width: 100% }
+            100% { width: 0 }
+        }
+
+        @keyframes cursor {
+            50% { border-color: transparent }
+        }
+
+        /* Status message */
         #status-message {
             display: none;
             position: fixed;
             top: 20px;
             right: 20px;
             z-index: 1000;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(to right, #4CAF50, #2196F3);
+            z-index: 9999;
         }
     </style>
 </head>
 <body>
-    <!-- Alert untuk status pengiriman email -->
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Status Message -->
     <div id="status-message" class="alert" role="alert"></div>
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="#">Rieke Setiawati Portfolio</a>
+            <a class="navbar-brand" href="#" data-aos="fade-right">Portfolio</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
+                    <li class="nav-item" data-aos="fade-left" data-aos-delay="100">
                         <a class="nav-link" href="#home">Home</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" data-aos="fade-left" data-aos-delay="200">
                         <a class="nav-link" href="#about">About</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" data-aos="fade-left" data-aos-delay="300">
                         <a class="nav-link" href="#projects">Projects</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" data-aos="fade-left" data-aos-delay="400">
                         <a class="nav-link" href="#contact">Contact</a>
                     </li>
                 </ul>
@@ -63,48 +358,86 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero-section d-flex align-items-center">
-        <div class="container text-center">
-            <h1 class="display-1 mb-4">My Portfolio</h1>
-            <h2 class="h3 mb-4">Software Engineering Student</h2>
-            <a href="#projects" class="btn btn-primary btn-lg">View My Work</a>
-        </div>
-    </section>
+   
+
+        <!-- Hero Section -->
+        <section id="home" class="hero-section d-flex align-items-center">
+            <div id="particles" class="particles"></div>
+            <div class="container text-center position-relative">
+                <h1 class="hero-title mb-4">My Portfolio</h1>
+                <h2 class="hero-subtitle mb-5">Software Engineering Student</h2>
+                <a href="#projects" class="btn hero-button">
+                    VIEW MY WORK
+                </a>
+            </div>
+        </section>
+    
+        <script>
+        // Enhanced particle effect
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const numberOfParticles = 30;
+    
+            for (let i = 0; i < numberOfParticles; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random size between 3px and 8px
+                const size = Math.random() * 5 + 3;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Random position
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                // Random animation delay and duration
+                const duration = Math.random() * 4 + 4; // 4-8 seconds
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+    
+        // Initialize particles on load
+        window.addEventListener('load', createParticles);
+        </script>
+    
 
     <!-- About Section -->
     <section id="about" class="py-5">
         <div class="container">
-            <h2 class="text-center mb-5">About Me</h2>
+            <h2 class="text-center mb-5" data-aos="fade-up">About Me</h2>
             <div class="row align-items-center">
-                <div class="col-md-6">
-                    <img src="foto profil.png" alt="Profile" class="img-fluid rounded">
+                <div class="col-md-6" data-aos="fade-right">
+                    <img src="/api/placeholder/600/400" alt="Profile" class="img-fluid rounded float-animation">
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6" data-aos="fade-left">
                     <h3 class="mb-4">Who am I?</h3>
                     <p class="lead">I am a final semester student at IPB School of Vocational Studies, majoring in Software Engineering Technology. With a strong foundation in both front-end and back-end development, I am passionate about creating efficient and user-friendly software solutions.</p>
                     <div class="skills mt-4">
                         <h4 class="mb-3">Technical Skills:</h4>
                         <div class="row g-3">
-                            <div class="col-auto">
+                            <div class="col-auto" data-aos="zoom-in" data-aos-delay="100">
                                 <span class="badge bg-primary p-2">HTML</span>
                             </div>
-                            <div class="col-auto">
+                            <div class="col-auto" data-aos="zoom-in" data-aos-delay="200">
                                 <span class="badge bg-primary p-2">CSS</span>
                             </div>
-                            <div class="col-auto">
+                            <div class="col-auto" data-aos="zoom-in" data-aos-delay="300">
                                 <span class="badge bg-primary p-2">JavaScript</span>
                             </div>
-                            <div class="col-auto">
+                            <div class="col-auto" data-aos="zoom-in" data-aos-delay="400">
                                 <span class="badge bg-primary p-2">PHP</span>
                             </div>
-                            <div class="col-auto">
+                            <div class="col-auto" data-aos="zoom-in" data-aos-delay="500">
                                 <span class="badge bg-primary p-2">Python</span>
                             </div>
-                            <div class="col-auto">
+                            <div class="col-auto" data-aos="zoom-in" data-aos-delay="600">
                                 <span class="badge bg-primary p-2">MySQL</span>
                             </div>
-                            <div class="col-auto">
+                            <div class="col-auto" data-aos="zoom-in" data-aos-delay="700">
                                 <span class="badge bg-primary p-2">PostgreSQL</span>
                             </div>
                         </div>
@@ -113,54 +446,55 @@
             </div>
         </div>
     </section>
-<!-- Projects Section -->
-<section id="projects" class="py-5 bg-light">
-    <div class="container">
-        <h2 class="text-center mb-5">My Projects</h2>
-        <div class="row g-4">
-            <!-- Project 1 -->
-            <div class="col-md-4">
-                <div class="card project-card">
-                    <img src="/api/placeholder/400/300" class="card-img-top" alt="Project 1">
-                    <div class="card-body">
-                        <h5 class="card-title">E-commerce Website</h5>
-                        <p class="card-text">A fully responsive e-commerce website built with Bootstrap and JavaScript.</p>
-                        <a href="#" class="btn btn-primary">View Project</a>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5" data-aos="fade-up">My Projects</h2>
+            <div class="row g-4">
+                <!-- Project 1 -->
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card project-card">
+                        <img src="/api/placeholder/400/300" class="card-img-top" alt="Project 1">
+                        <div class="card-body">
+                            <h5 class="card-title">E-commerce Website</h5>
+                            <p class="card-text">A fully responsive e-commerce website built with Bootstrap and JavaScript.</p>
+                            <a href="#" class="btn btn-primary animated-btn">View Project</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!-- Project 2 -->
-            <div class="col-md-4">
-                <div class="card project-card">
-                    <img src="/api/placeholder/400/300" class="card-img-top" alt="Project 2">
-                    <div class="card-body">
-                        <h5 class="card-title">Portfolio Template</h5>
-                        <p class="card-text">A clean and modern portfolio template for creative professionals.</p>
-                        <a href="#" class="btn btn-primary">View Project</a>
+                <!-- Project 2 -->
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card project-card">
+                        <img src="/api/placeholder/400/300" class="card-img-top" alt="Project 2">
+                        <div class="card-body">
+                            <h5 class="card-title">Portfolio Template</h5>
+                            <p class="card-text">A clean and modern portfolio template for creative professionals.</p>
+                            <a href="#" class="btn btn-primary animated-btn">View Project</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!-- Project 3 -->
-            <div class="col-md-4">
-                <div class="card project-card">
-                    <img src="/api/placeholder/400/300" class="card-img-top" alt="Project 3">
-                    <div class="card-body">
-                        <h5 class="card-title">Blog Platform</h5>
-                        <p class="card-text">A feature-rich blog platform with a custom CMS system.</p>
-                        <a href="#" class="btn btn-primary">View Project</a>
+                <!-- Project 3 -->
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="card project-card">
+                        <img src="/api/placeholder/400/300" class="card-img-top" alt="Project 3">
+                        <div class="card-body">
+                            <h5 class="card-title">Blog Platform</h5>
+                            <p class="card-text">A feature-rich blog platform with a custom CMS system.</p>
+                            <a href="#" class="btn btn-primary animated-btn">View Project</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
     <!-- Contact Section -->
     <section id="contact" class="py-5">
         <div class="container">
-            <h2 class="text-center mb-5">Contact Me</h2>
+            <h2 class="text-center mb-5" data-aos="fade-up">Contact Me</h2>
             <div class="row justify-content-center">
-                <div class="col-md-8">
+                <div class="col-md-8" data-aos="zoom-in">
                     <form id="contactForm" onsubmit="sendEmail(event)">
                         <div class="mb-3">
                             <input type="text" class="form-control" id="name" placeholder="Your Name" required>
@@ -172,7 +506,7 @@
                             <textarea class="form-control" id="message" rows="5" placeholder="Your Message" required></textarea>
                         </div>
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary btn-lg">Send Message</button>
+                            <button type="submit" class="btn btn-primary btn-lg animated-btn">Send Message</button>
                         </div>
                     </form>
                 </div>
@@ -180,15 +514,37 @@
         </div>
     </section>
 
-    <!-- Footer (sama seperti sebelumnya) -->
+    <!-- Footer -->
     <footer class="bg-dark text-white py-4">
-        <!-- ... (konten footer tetap sama) ... -->
+        <div class="container text-center">
+            <div class="mb-3">
+                <a href="#" class="text-white me-3 social-icon"><i class="fab fa-github"></i></a>
+                <a href="#" class="text-white me-3 social-icon"><i class="fab fa-linkedin"></i></a>
+                <a href="#" class="text-white me-3 social-icon"><i class="fab fa-twitter"></i></a>
+            </div>
+            <p class="mb-0">&copy; 2024 My Portfolio. All rights reserved.</p>
+        </div>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     
-    <!-- Script untuk mengirim email -->
     <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        // Progress bar
+        window.onscroll = function() {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (winScroll / height) * 100;
+            document.getElementById("progressBar").style.width = scrolled + "%";
+        };
+
+        // Email function
         function sendEmail(event) {
             event.preventDefault();
             
